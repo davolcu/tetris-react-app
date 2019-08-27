@@ -1,8 +1,11 @@
 // Out of the box imports
 import React from "react";
+// Custom imports
+import {StyledCell} from "./styles/StyledTetris";
+import {TETROMINOS} from "../services/gameService";
 
 const Cell = ({type}) => (
-    <div> Cell </div>
+    <StyledCell type={type} color={TETROMINOS[type].color}> cell </StyledCell>
 );
 
 export default Cell;
