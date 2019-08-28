@@ -76,18 +76,27 @@ export const randomTetrominos = () => {
     return TETROMINOS[tetrominos[Math.floor(Math.random() * tetrominos.length)]];
 };
 
-// Action decider in order to move a piece
-export const movePiece = ({keyCode}, gameOver) => {
+// Starts/Resets a game
+export const startGame = (setStage, resetTetromino) => {
+    setStage(createStage());
+    resetTetromino();
+};
+
+// It decides how to move a piece
+export const movePiece = ({keyCode}, gameOver, updateTetromino) => {
     if (!gameOver) {
         switch (keyCode) {
             case 37:
                 // Do something left
+                updateTetromino({x: -1, y: 0});
                 break;
             case 39:
                 // Do something right
+                updateTetromino({x: 1, y: 0});
                 break;
             case 40:
                 // Do something bottom
+                updateTetromino({x: 0, y: 1, collided: false});
                 break;
         }
     }

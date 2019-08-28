@@ -4,18 +4,20 @@ import React, {useState} from "react";
 import Stage from "./Stage";
 import Display from "./Display";
 import StartButton from "./StartButton";
-import {createStage, movePiece} from "../services/gameService";
 import {StyledTetris, StyledTetrisWrapper} from "./styles/StyledTetris";
-import {usePlayer} from "../hooks/usePlayer";
+import {movePiece, startGame} from "../services/gameService";
 import {useStage} from "../hooks/useStage";
+import {useTetromino} from "../hooks/useTetromino";
 
 const Tetris = () => {
     const [dropTime, setDropTime] = useState(null),
         [gameOver, setGameOver] = useState(false),
-        [player] = usePlayer(), [stage, setStage] = useState(player);
+        [tetromino, updateTetromino, resetTetromino] = useTetromino(),
+        [stage, setStage] = useStage(tetromino);
 
     return (
-        <StyledTetrisWrapper role={"button"} tabIndex={"0"} onKeyDown={e => movePiece(e, gameOver)}>
+        <StyledTetrisWrapper role={"button"} tabIndex={"0"}
+                             onKeyDown={e => movePiece(e, gameOver, updateTetromino)}>
             <StyledTetris>
                 <Stage stage={stage}/>
 
@@ -30,7 +32,7 @@ const Tetris = () => {
                         </div>
                     )}
 
-                    < StartButton/>
+                    <StartButton callback={() => startGame(setStage, resetTetromino)}/>
                 </aside>
             </StyledTetris>
         </StyledTetrisWrapper>
