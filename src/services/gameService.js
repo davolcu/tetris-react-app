@@ -77,27 +77,66 @@ export const randomTetrominos = () => {
 };
 
 // Starts/Resets a game
-export const startGame = (setStage, resetTetromino) => {
+export const startGame = (setStage, setGameOver, resetTetromino) => {
     setStage(createStage());
+    setGameOver(false);
     resetTetromino();
 };
 
 // It decides how to move a piece
-export const movePiece = ({keyCode}, gameOver, updateTetromino) => {
+export const movePiece = ({keyCode}, gameOver, setGameOver, setDropTime, updateTetromino, tetromino, stage) => {
     if (!gameOver) {
+        let position;
+
         switch (keyCode) {
             case 37:
-                // Do something left
-                updateTetromino({x: -1, y: 0});
+                // Check the collision before the movement before the left movement
+                position = {x: -1, y: 0};
+                if (!checkCollision(tetromino, stage, position)) {
+                    updateTetromino(position);
+                }
                 break;
             case 39:
-                // Do something right
-                updateTetromino({x: 1, y: 0});
+                // Check the collision before the movement before the right movement
+                position = {x: 1, y: 0};
+                if (!checkCollision(tetromino, stage, position)) {
+                    updateTetromino(position);
+                }
                 break;
             case 40:
-                // Do something bottom
-                updateTetromino({x: 0, y: 1, collided: false});
+                // Check the collision before the movement before the bottom movement
+                position = {x: 0, y: 1, collided: false};
+                if (!checkCollision(tetromino, stage, position)) {
+                    updateTetromino(position);
+                } else {
+                    if (tetromino.pos.y < 1) {
+                        setGameOver(true);
+                        setDropTime(null);
+                    }
+                    position = {x: 0, y: 0, collided: true};
+                    updateTetromino(position)
+                }
                 break;
+        }
+    }
+};
+
+export const checkCollision = (tetromino, stage, {x: moveX, y: moveY}) => {
+    // For is used because is a little bit faster than map
+    for (let y = 0; y < tetromino.tetromino.length; y++) {
+        for (let x = 0; x < tetromino.tetromino[y].length; x++) {
+            // First we check that we are in an actual cell
+            if (tetromino.tetromino[y][x] !== 0){
+                switch (true) {
+                    // We are moving out of the game area (y)
+                    case !stage[y + moveY + tetromino.pos.y]:
+                    // We are moving out of the game area (x)
+                    case !stage[y + moveY + tetromino.pos.y][x + moveX + tetromino.pos.x]:
+                    // We are moving to an occupied position
+                    case stage[y + moveY + tetromino.pos.y][x + moveX + tetromino.pos.x][1] !== "clear":
+                        return true;
+                }
+            }
         }
     }
 };

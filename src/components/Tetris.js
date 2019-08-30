@@ -13,11 +13,11 @@ const Tetris = () => {
     const [dropTime, setDropTime] = useState(null),
         [gameOver, setGameOver] = useState(false),
         [tetromino, updateTetromino, resetTetromino] = useTetromino(),
-        [stage, setStage] = useStage(tetromino);
+        [stage, setStage] = useStage(tetromino, resetTetromino);
 
     return (
         <StyledTetrisWrapper role={"button"} tabIndex={"0"}
-                             onKeyDown={e => movePiece(e, gameOver, updateTetromino)}>
+                             onKeyDown={e => movePiece(e, gameOver, setGameOver, setDropTime, updateTetromino, tetromino, stage)}>
             <StyledTetris>
                 <Stage stage={stage}/>
 
@@ -32,7 +32,7 @@ const Tetris = () => {
                         </div>
                     )}
 
-                    <StartButton callback={() => startGame(setStage, resetTetromino)}/>
+                    <StartButton callback={() => startGame(setStage, setGameOver, resetTetromino)}/>
                 </aside>
             </StyledTetris>
         </StyledTetrisWrapper>

@@ -1,12 +1,12 @@
 // Out of the box imports
 import {useState, useCallback} from "react";
 // Custom imports
-import {randomTetrominos, STAGE_WIDTH} from "../services/gameService";
+import {randomTetrominos, STAGE_WIDTH, TETROMINOS} from "../services/gameService";
 
 export const useTetromino = () => {
     const [tetromino, setTetromino] = useState({
         pos: {x: 0, y: 0},
-        tetromino: randomTetrominos().shape,
+        tetromino:  TETROMINOS[0].shape,
         collided: false
     });
 

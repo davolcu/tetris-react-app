@@ -3,7 +3,7 @@ import {useState, useEffect} from "react";
 // Custom imports
 import {createStage} from "../services/gameService";
 
-export const useStage = (tetromino, resetPiece) => {
+export const useStage = (tetromino, resetTetromino) => {
     const [stage, setStage] = useState(createStage());
 
     useEffect(() => {
@@ -25,10 +25,15 @@ export const useStage = (tetromino, resetPiece) => {
                 });
             });
 
+            // Finally check if tetromino has collided
+            if (tetromino.collided) {
+                resetTetromino();
+            }
+
             return newStage;
         });
 
-    }, [tetromino]);
+    }, [tetromino, resetTetromino]);
 
     return [stage, setStage];
 };
