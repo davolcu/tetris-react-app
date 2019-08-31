@@ -77,18 +77,20 @@ export const randomTetrominos = () => {
 };
 
 // Starts/Resets a game
-export const startGame = (setStage, setGameOver, resetTetromino) => {
+export const startGame = (setStage, setGameOver, setDropTime, resetTetromino) => {
     setStage(createStage());
+    setDropTime(1000);
     setGameOver(false);
     resetTetromino();
 };
 
 // It decides how to move a piece
-export const movePiece = ({keyCode}, gameOver, setGameOver, setDropTime, updateTetromino, tetromino, stage) => {
+export const movePiece = ({keyCode}, gameOver, setGameOver, setDropTime, rotateTetromino, updateTetromino, tetromino, stage) => {
     if (!gameOver) {
         let position;
 
         switch (keyCode) {
+            case 65:
             case 37:
                 // Check the collision before the movement before the left movement
                 position = {x: -1, y: 0};
@@ -96,6 +98,7 @@ export const movePiece = ({keyCode}, gameOver, setGameOver, setDropTime, updateT
                     updateTetromino(position);
                 }
                 break;
+            case 68:
             case 39:
                 // Check the collision before the movement before the right movement
                 position = {x: 1, y: 0};
@@ -103,30 +106,38 @@ export const movePiece = ({keyCode}, gameOver, setGameOver, setDropTime, updateT
                     updateTetromino(position);
                 }
                 break;
+            case 83:
             case 40:
                 // Check the collision before the movement before the bottom movement
                 position = {x: 0, y: 1, collided: false};
                 if (!checkCollision(tetromino, stage, position)) {
                     updateTetromino(position);
                 } else {
+                    // Collision up-here means game over
                     if (tetromino.pos.y < 1) {
                         setGameOver(true);
                         setDropTime(null);
                     }
+
                     position = {x: 0, y: 0, collided: true};
                     updateTetromino(position)
                 }
+                break;
+            case 87:
+            case 38:
+                rotateTetromino(stage);
                 break;
         }
     }
 };
 
+// It decides if a piece can be moved
 export const checkCollision = (tetromino, stage, {x: moveX, y: moveY}) => {
     // For is used because is a little bit faster than map
     for (let y = 0; y < tetromino.tetromino.length; y++) {
         for (let x = 0; x < tetromino.tetromino[y].length; x++) {
             // First we check that we are in an actual cell
-            if (tetromino.tetromino[y][x] !== 0){
+            if (tetromino.tetromino[y][x] !== 0) {
                 switch (true) {
                     // We are moving out of the game area (y)
                     case !stage[y + moveY + tetromino.pos.y]:

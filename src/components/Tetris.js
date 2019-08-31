@@ -5,19 +5,37 @@ import Stage from "./Stage";
 import Display from "./Display";
 import StartButton from "./StartButton";
 import {StyledTetris, StyledTetrisWrapper} from "./styles/StyledTetris";
-import {movePiece, startGame} from "../services/gameService";
+import {checkCollision, movePiece, startGame} from "../services/gameService";
+import {useInterval} from "../hooks/useInterval";
 import {useStage} from "../hooks/useStage";
 import {useTetromino} from "../hooks/useTetromino";
 
 const Tetris = () => {
     const [dropTime, setDropTime] = useState(null),
         [gameOver, setGameOver] = useState(false),
-        [tetromino, updateTetromino, resetTetromino] = useTetromino(),
+        [tetromino, rotateTetromino, updateTetromino, resetTetromino] = useTetromino(),
         [stage, setStage] = useStage(tetromino, resetTetromino);
+
+    useInterval(() => {
+        let position = {x: 0, y: 1, collided: false};
+        if (!checkCollision(tetromino, stage, position)) {
+            updateTetromino(position);
+        } else {
+            // Collision up-here means game over
+            if (tetromino.pos.y < 1) {
+                setGameOver(true);
+                setDropTime(null);
+            }
+
+            position = {x: 0, y: 0, collided: true};
+            updateTetromino(position)
+        }
+    }, dropTime);
 
     return (
         <StyledTetrisWrapper role={"button"} tabIndex={"0"}
-                             onKeyDown={e => movePiece(e, gameOver, setGameOver, setDropTime, updateTetromino, tetromino, stage)}>
+                             onKeyDown={e => movePiece(e, gameOver, setGameOver, setDropTime, rotateTetromino,
+                                 updateTetromino, tetromino, stage)}>
             <StyledTetris>
                 <Stage stage={stage}/>
 
@@ -32,7 +50,7 @@ const Tetris = () => {
                         </div>
                     )}
 
-                    <StartButton callback={() => startGame(setStage, setGameOver, resetTetromino)}/>
+                    <StartButton callback={() => startGame(setStage, setGameOver, setDropTime, resetTetromino)}/>
                 </aside>
             </StyledTetris>
         </StyledTetrisWrapper>
