@@ -5,7 +5,7 @@ import Stage from "./Stage";
 import Display from "./Display";
 import StartButton from "./StartButton";
 import {StyledTetris, StyledTetrisWrapper} from "./styles/StyledTetris";
-import {checkCollision, movePiece, startGame} from "../services/gameService";
+import {checkCollision, movePiece, startGame, releaseTimer} from "../services/gameService";
 import {useInterval} from "../hooks/useInterval";
 import {useStage} from "../hooks/useStage";
 import {useTetromino} from "../hooks/useTetromino";
@@ -33,7 +33,7 @@ const Tetris = () => {
     }, dropTime);
 
     return (
-        <StyledTetrisWrapper role={"button"} tabIndex={"0"}
+        <StyledTetrisWrapper role={"button"} tabIndex={"0"} onKeyUp={e => releaseTimer(e, gameOver, setDropTime)}
                              onKeyDown={e => movePiece(e, gameOver, setGameOver, setDropTime, rotateTetromino,
                                  updateTetromino, tetromino, stage)}>
             <StyledTetris>

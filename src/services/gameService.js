@@ -108,15 +108,16 @@ export const movePiece = ({keyCode}, gameOver, setGameOver, setDropTime, rotateT
                 break;
             case 83:
             case 40:
+                //Disable the timer first of all
+                setDropTime(null);
                 // Check the collision before the movement before the bottom movement
                 position = {x: 0, y: 1, collided: false};
                 if (!checkCollision(tetromino, stage, position)) {
                     updateTetromino(position);
                 } else {
-                    // Collision up-here means game over
+                    // Collision up here means game over
                     if (tetromino.pos.y < 1) {
                         setGameOver(true);
-                        setDropTime(null);
                     }
 
                     position = {x: 0, y: 0, collided: true};
@@ -149,5 +150,11 @@ export const checkCollision = (tetromino, stage, {x: moveX, y: moveY}) => {
                 }
             }
         }
+    }
+};
+
+export const releaseTimer = ({keyCode}, gameOver, setDropTime) => {
+    if (!gameOver && (keyCode === 83 || keyCode === 40)) {
+        setDropTime(1000);
     }
 };
