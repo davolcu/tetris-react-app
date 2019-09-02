@@ -5,16 +5,18 @@ import Stage from "./Stage";
 import Display from "./Display";
 import StartButton from "./StartButton";
 import {StyledTetris, StyledTetrisWrapper} from "./styles/StyledTetris";
-import {checkCollision, movePiece, startGame, releaseTimer} from "../services/gameService";
+import {checkCollision, movePiece, releaseTimer, startGame} from "../services/gameService";
 import {useInterval} from "../hooks/useInterval";
 import {useStage} from "../hooks/useStage";
 import {useTetromino} from "../hooks/useTetromino";
+import {useGameStatus} from "../hooks/useGameStatus";
 
 const Tetris = () => {
     const [dropTime, setDropTime] = useState(null),
         [gameOver, setGameOver] = useState(false),
         [tetromino, rotateTetromino, updateTetromino, resetTetromino] = useTetromino(),
-        [stage, setStage] = useStage(tetromino, resetTetromino);
+        [stage, setStage, rowsCleared] = useStage(tetromino, resetTetromino),
+        [score, setScore, rows, setRows, level, setLevel] = useGameStatus(rowsCleared);
 
     useInterval(() => {
         let position = {x: 0, y: 1, collided: false};
@@ -33,7 +35,8 @@ const Tetris = () => {
     }, dropTime);
 
     return (
-        <StyledTetrisWrapper role={"button"} tabIndex={"0"} onKeyUp={e => releaseTimer(e, gameOver, setDropTime)}
+        <StyledTetrisWrapper role={"button"} tabIndex={"0"}
+                             onKeyUp={e => releaseTimer(e, gameOver, setDropTime, rows, level, setLevel)}
                              onKeyDown={e => movePiece(e, gameOver, setGameOver, setDropTime, rotateTetromino,
                                  updateTetromino, tetromino, stage)}>
             <StyledTetris>
@@ -44,13 +47,14 @@ const Tetris = () => {
                         <Display gameOver={gameOver} text={"Game Over"}/>
                     ) : (
                         <div>
-                            < Display text={"Score"}/>
-                            < Display text={"Rows"}/>
-                            < Display text={"Level"}/>
+                            < Display text={`Score: ${score}`}/>
+                            < Display text={`Rows: ${rows}`}/>
+                            < Display text={`Level: ${level}`}/>
                         </div>
                     )}
 
-                    <StartButton callback={() => startGame(setStage, setGameOver, setDropTime, resetTetromino)}/>
+                    <StartButton callback={() => startGame(setStage, setGameOver, setDropTime, setScore, setRows,
+                        setLevel, resetTetromino)}/>
                 </aside>
             </StyledTetris>
         </StyledTetrisWrapper>

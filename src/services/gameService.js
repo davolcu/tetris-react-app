@@ -77,10 +77,13 @@ export const randomTetrominos = () => {
 };
 
 // Starts/Resets a game
-export const startGame = (setStage, setGameOver, setDropTime, resetTetromino) => {
+export const startGame = (setStage, setGameOver, setDropTime, setScore, setRows, setLevel, resetTetromino) => {
     setStage(createStage());
-    setDropTime(1000);
+    setDropTime(1200);
     setGameOver(false);
+    setScore(0);
+    setRows(0);
+    setLevel(0);
     resetTetromino();
 };
 
@@ -110,6 +113,7 @@ export const movePiece = ({keyCode}, gameOver, setGameOver, setDropTime, rotateT
             case 40:
                 //Disable the timer first of all
                 setDropTime(null);
+
                 // Check the collision before the movement before the bottom movement
                 position = {x: 0, y: 1, collided: false};
                 if (!checkCollision(tetromino, stage, position)) {
@@ -118,6 +122,7 @@ export const movePiece = ({keyCode}, gameOver, setGameOver, setDropTime, rotateT
                     // Collision up here means game over
                     if (tetromino.pos.y < 1) {
                         setGameOver(true);
+                        setDropTime(null);
                     }
 
                     position = {x: 0, y: 0, collided: true};
@@ -153,8 +158,10 @@ export const checkCollision = (tetromino, stage, {x: moveX, y: moveY}) => {
     }
 };
 
-export const releaseTimer = ({keyCode}, gameOver, setDropTime) => {
+export const releaseTimer = ({keyCode}, gameOver, setDropTime, rows, level, setLevel) => {
     if (!gameOver && (keyCode === 83 || keyCode === 40)) {
-        setDropTime(1000);
+        if (rows >  (level + 1) * 10)
+            setLevel(prev => prev + 1);
+        setDropTime(1000 / (level + 1) + 200);
     }
 };
