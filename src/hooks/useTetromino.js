@@ -1,23 +1,21 @@
 // Out of the box imports
-import {useCallback, useState} from "react";
+import { useCallback, useState } from 'react';
 // Custom imports
-import {checkCollision, randomTetrominos, STAGE_WIDTH, TETROMINOS} from "../services/gameService";
+import { checkCollision, randomTetrominos, STAGE_WIDTH, TETROMINOS } from '../services/gameService';
 
 export const useTetromino = () => {
     const [tetromino, setTetromino] = useState({
-        pos: {x: 0, y: 0},
+        pos: { x: 0, y: 0 },
         tetromino: TETROMINOS[0].shape,
-        collided: false
+        collided: false,
     });
 
     const rotatePiece = (matrix, dir) => {
         // First transpose the tetromino
-        const transTetro = matrix.map((_, index) =>
-            matrix.map(col => col[index])
-        );
+        const transTetro = matrix.map((_, index) => matrix.map((col) => col[index]));
 
         // Reverse the transposed matrix depending on the direction
-        if (dir > 0) return transTetro.map(row => row.reverse());
+        if (dir > 0) return transTetro.map((row) => row.reverse());
         return transTetro.reverse();
     };
 
@@ -31,7 +29,7 @@ export const useTetromino = () => {
         let offset = 1;
 
         //Loop that checks if the rotation can be done properly
-        while (checkCollision(clonedTetromino, stage, {x: 0, y: 0})){
+        while (checkCollision(clonedTetromino, stage, { x: 0, y: 0 })) {
             clonedTetromino.pos.x += offset;
             offset = -(offset + (offset > 0 ? 1 : -1));
 
@@ -45,19 +43,19 @@ export const useTetromino = () => {
         setTetromino(clonedTetromino);
     };
 
-    const updateTetromino = ({x, y, collided}) => {
-        setTetromino(prev => ({
+    const updateTetromino = ({ x, y, collided }) => {
+        setTetromino((prev) => ({
             ...prev,
-            pos: {x: prev.pos.x += x, y: prev.pos.y += y},
-            collided
+            pos: { x: (prev.pos.x += x), y: (prev.pos.y += y) },
+            collided,
         }));
     };
 
     const resetTetromino = useCallback(() => {
         setTetromino({
-            pos: {x: STAGE_WIDTH / 2 - 2, y: 0},
+            pos: { x: STAGE_WIDTH / 2 - 2, y: 0 },
             tetromino: randomTetrominos().shape,
-            collided: false
+            collided: false,
         });
     }, []);
 

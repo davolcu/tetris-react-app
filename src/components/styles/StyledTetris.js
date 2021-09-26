@@ -1,17 +1,17 @@
 // Out of the box imports
-import styled from "styled-components";
+import styled from 'styled-components';
 // Custom imports
-import backgroundImage from "./../../img/bg.png";
+import backgroundImage from './../../img/bg.png';
 
 // Styles for Cell component
 export const StyledCell = styled.div`
     width: auto;
-    background: rgba(${props => props.color}, 0.8);
-    border: ${props => props.type === 0 ? "none" : "5px solid"};
-    border-bottom-color: rgba(${props => props.color}, 0.1);
-    border-left-color: rgba(${props => props.color}, 0.3);
-    border-top-color: rgba(${props => props.color}, 1);
-    border-right-color: rgba(${props => props.color}, 1);
+    background: rgba(${(props) => props.color}, 0.8);
+    border: ${(props) => (props.type === 0 ? 'none' : '5px solid')};
+    border-bottom-color: rgba(${(props) => props.color}, 0.1);
+    border-left-color: rgba(${(props) => props.color}, 0.3);
+    border-top-color: rgba(${(props) => props.color}, 1);
+    border-right-color: rgba(${(props) => props.color}, 1);
 `;
 
 // Styles for Tetris component
@@ -21,7 +21,7 @@ export const StyledTetris = styled.div`
     padding: 40px;
     margin: 0 auto;
     max-width: 900px;
-    
+
     aside {
         width: 100%;
         max-width: 200px;
@@ -42,8 +42,8 @@ export const StyledTetrisWrapper = styled.div`
 // Styles for Stage component
 export const StyledStage = styled.div`
     display: grid;
-    grid-template-rows: repeat(${props => props.height}, calc(25vw / ${props => props.width}));
-    grid-template-columns: repeat(${props => props.width}, 1fr);
+    grid-template-rows: repeat(${(props) => props.height}, calc(25vw / ${(props) => props.width}));
+    grid-template-columns: repeat(${(props) => props.width}, 1fr);
     grid-gap: 1px;
     border: 2px solid #333;
     width: 100%;
@@ -62,7 +62,7 @@ export const StyledDisplay = styled.div`
     min-height: 30px;
     width: 100%;
     border-radius: 20px;
-    color: ${props => (props.gameOver ? 'red' : '#999')};
+    color: ${(props) => (props.gameOver ? 'red' : '#999')};
     background: #000;
     font-family: Pixel, Arial, Helvetica, sans-serif;
     font-size: 0.8rem;

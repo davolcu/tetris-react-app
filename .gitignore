@@ -3,6 +3,9 @@
 # .idea files
 .idea/*
 
+# vs-code
+.history/
+
 # dependencies
 /node_modules
 /.pnp

@@ -1,6 +1,6 @@
-import {useEffect, useState, useCallback} from "react";
+import { useEffect, useState, useCallback } from 'react';
 
-export const useGameStatus = rowsCleared => {
+export const useGameStatus = (rowsCleared) => {
     const [score, setScore] = useState(0),
         [rows, setRows] = useState(0),
         [level, setLevel] = useState(0),
@@ -9,8 +9,8 @@ export const useGameStatus = rowsCleared => {
             // We have score
             if (rowsCleared > 0) {
                 // Original tetris recipe
-                setScore(prev => prev + linePoints[rowsCleared - 1] * (level + 1));
-                setRows(prev => prev + rowsCleared);
+                setScore((prev) => prev + linePoints[rowsCleared - 1] * (level + 1));
+                setRows((prev) => prev + rowsCleared);
             }
         }, [level, linePoints, rowsCleared]);
 
