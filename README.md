@@ -1,3 +1,7 @@
+This a non-responsive Tetris web application made up with React: [Tetris React App](https://tetris-react-app.netlify.com/).
+
+All credit to [FreeCodeCamp](https://www.freecodecamp.org/), who are the original authors of this App, I just have updated it and made some improvements to it.
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
